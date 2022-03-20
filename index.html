@@ -1,1 +1,40 @@
-Hi! My name is Joel Schmitz and I'm a PhD student at [University of Neuchâtel](https://unine.ch).
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Joel Schmitz's Home Page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<p>Hi I'm Joel Schmitz and study Mathematics. If you enjoy fancy fractal figures, you may like the following (WebGL): <a href="julia.html">Julia</a>, <a href="quat.html">Quaternion Julia</a></p>
+	<script>
+var content = document.getElementById("content");
+
+for(i = 0; i < 40; i++){
+	var box = document.createElement("div");
+	box.setAttribute("class", "slidebox");
+
+	var width = Math.random();
+	var height = Math.random();
+
+	var speed = Math.pow(Math.random(), 2.0) * 0.05 + 0.01;
+	var offset = Math.random();
+
+	box.style.top = String((1-height)*50) + '%';
+	box.style.bottom = String((1-height)*50) + '%';
+	box.style.zIndex = String(Math.floor(-height*10000.0));
+
+	box.style.width = String(width*100) + '%';
+	box.style.opacity = String(Math.pow(1-height, 2.0));
+	box.style.background = "hsl("+String(height*360)+",100%,50%)";
+
+	box.style.animationDuration = String(1.0/speed) + "s";
+	box.style.animationDelay = String(-offset * 1.0/speed) + "s";
+
+	document.body.insertBefore(box, content);
+}
+
+	</script>
+	</body>
+</html>
