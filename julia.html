@@ -1,0 +1,278 @@
+<html>
+	<head>
+		<title>Wilkommen auf meiner privaten Homepage</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="webgl-utils.js"></script>
+
+		<script id="shader-fs" type="x-shader/x-fragment">
+precision mediump float;
+
+const int maxitr = 15;
+
+varying vec2 pos;
+
+uniform float t;
+
+
+vec3 gradient1(float t){
+	vec4 v[5];
+	v[0] = vec4(0.0,0.0,0.0,0.0);
+	v[1] = vec4(0.4,0.0,0.0,0.5);
+	v[2] = vec4(0.9,0.3,0.0,0.8);
+	v[3] = vec4(1.0,0.9,0.1,0.98);
+	v[4] = vec4(1.0,1.0,1.0,1.0);
+
+
+	if(t < v[1].w){
+		return mix(v[0].xyz, v[1].xyz, t / v[1].w);
+	}else if(t < v[2].w){
+		return mix(v[1].xyz, v[2].xyz, (t - v[1].w) / (v[2].w - v[1].w));
+	}else if(t < v[3].w){
+		return mix(v[2].xyz, v[3].xyz, (t - v[2].w) / (v[3].w - v[2].w));
+	}else{
+		return mix(v[3].xyz, v[4].xyz, (t - v[3].w) / (v[4].w - v[3].w));
+	}
+}
+
+float distanceToLine(vec2 p, vec2 a, vec2 s){
+	vec2 t = p - a;
+	return abs(t.x*s.y - t.y*s.x)/length(s);
+}
+/*
+float cosh(float x){
+	return .5*(exp(x)+exp(-x));
+}
+
+float sinh(float x){
+	return .5*(exp(x)-exp(-x));
+}
+
+vec2 ccos(vec2 z){
+	return vec2(cos(z.x)*cosh(z.y), sin(z.x)*sinh(z.y));
+}
+
+vec2 csin(vec2 z ){
+	return vec2(sin(z.x)*cosh(z.y),cos(z.x)*sinh(z.y));
+}
+*/
+
+void main(void){
+	vec2 c = vec2(cos(t*.2133),sin(t*.24121)) * sin(.1632*t);
+
+	vec2 line1a = vec2(c.x, -c.y)*.2;
+	vec2 line1s = vec2(-line1a.y,line1a.x);
+	float line1mindist = 1.0;
+
+	vec2 line2a = vec2(cos(.181*t +.525), sin(.123*t +.1441)) * sin(.1423*t+.634);
+	vec2 line2s = vec2(c.x, c.y);
+	float line2mindist = 1.0;
+
+	vec2 z = pos*1.5;
+	vec2 z2 = vec2(z.x*z.x,z.y*z.y);
+
+	float dist;
+	int itr = maxitr;
+
+	for(int i=0;i < maxitr;i++){
+		if(z2.x + z2.y > 256.){
+			itr = i;
+			break;
+		}
+
+		z = vec2(sqrt(z.x*z.x+.001), z.y);
+//		z.y = 2.0*z.x*z.y + c.y;
+//		z.x = z2.x - z2.y + c.x;
+		z.x = z.x*(z2.x - 3.*z2.y) + c.x;
+		z.y = z.y*(3.*z2.x - z2.y) + c.y;
+//		z = csin(z) + c;
+		z2 = vec2(z.x*z.x, z.y*z.y);
+
+		dist = distanceToLine(z,line1a,line1s);
+		if(dist < line1mindist){ line1mindist = dist; }
+
+		dist = distanceToLine(z,line2a,line2s);
+		if(dist < line2mindist){ line2mindist = dist; }
+
+	}
+
+	vec3 col = vec3(0.0);
+
+	if(itr<maxitr){
+		z2.y = (log(log(z2.x + z2.y)) - 2.0 - log(2.0))/log(2.0);
+//		z2.y = (log(log(z2.x + z2.y)) - 2.0 - log(3.0))/log(3.0);
+//		z2.y = -1.0;
+	} else {
+		z2.y = 0.0;
+		itr = 0;
+	}
+
+	col = gradient1((float(itr) + 1.0 - z2.y)/float(maxitr));
+	col = mix(col, col.bgr, min(1.0,0.5 * abs(pos.x - pos.y)));
+	
+
+	col+= gradient1(max(0.0,1.0 - 2.0 * line1mindist));
+	col+= gradient1(max(0.0,1.0 - 2.0 * line2mindist)).bgr;
+
+	gl_FragColor = vec4(col,1.0);
+}
+		</script>
+
+		<script id="shader-vs" type="x-shader/x-vertex">
+attribute vec2 aVertexPosition;
+
+uniform vec2 resolution;
+
+varying vec2 pos;
+
+
+void main(void){
+	gl_Position = vec4(aVertexPosition,0.0,1.0);
+	pos = vec2(aVertexPosition.x * resolution.x/resolution.y, aVertexPosition.y);
+}
+		</script>
+
+		<script type="text/javascript">
+var gl;
+var canvas;
+var startTime;
+function initGL(canvas){
+	gl = WebGLUtils.setupWebGL(canvas);
+	if(!gl){
+		alert("Could not initialize WebGL.");
+		return;
+	}
+	gl.viewportWidth = canvas.width;
+	gl.viewportHeight = canvas.height;
+}
+
+
+
+function getShader(id){
+	var shaderScript = document.getElementById(id);
+	if (!shaderScript){
+		alert("Shaders could not be found");
+		return null;
+	}
+
+	var str = "";
+	var k = shaderScript.firstChild;
+	while(k){
+		if (k.nodeType == 3) {
+			str += k.textContent;
+		}
+		k = k.nextSibling;
+	}
+
+	var shader;
+	if(shaderScript.type == "x-shader/x-fragment"){
+		shader = gl.createShader(gl.FRAGMENT_SHADER);
+	} else if (shaderScript.type == "x-shader/x-vertex"){
+		shader = gl.createShader(gl.VERTEX_SHADER);
+	} else {
+		return null;
+	}
+
+	gl.shaderSource(shader, str);
+	gl.compileShader(shader);
+
+	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)){
+		alert(id + gl.getShaderInfoLog(shader));
+		return null;
+	}
+
+	return shader;
+}
+
+
+var shaderProgram;
+function initShaders(){
+	var fragmentShader = getShader("shader-fs");
+	var vertexShader = getShader("shader-vs");
+
+	shaderProgram = gl.createProgram();
+	gl.attachShader(shaderProgram, vertexShader);
+	gl.attachShader(shaderProgram, fragmentShader);
+	gl.linkProgram(shaderProgram);
+
+	if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)){
+		alert("Error initializing shaders");
+	}
+
+	gl.useProgram(shaderProgram);
+
+	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+	shaderProgram.timeUniform = gl.getUniformLocation(shaderProgram, "t");
+	shaderProgram.resolutionUniform = gl.getUniformLocation(shaderProgram, "resolution");
+
+}
+
+
+var vertexPositionBuffer;
+
+function initBuffers() {
+	vertexPositionBuffer=gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+
+	var vertices = [
+		-1.0,-1.0,
+		-1.0, 1.0,
+		 1.0,-1.0,
+		 1.0, 1.0
+	];
+
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	vertexPositionBuffer.itemSize = 2;
+	vertexPositionBuffer.numItems = 4;
+}
+
+function drawScene(){
+	gl.viewport(0,0,gl.viewportWidth, gl.viewportHeight);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	var time = (Date.now() - startTime) / 1000.0;
+	gl.uniform1f(shaderProgram.timeUniform, time);
+
+	gl.uniform2f(shaderProgram.resolutionUniform, gl.viewportWidth, gl.viewportHeight);
+	
+
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPositionBuffer.numItems);
+}
+
+function render(){
+	requestAnimFrame(render, canvas);
+	drawScene();
+}
+
+function webGLStart(){
+	canvas = document.getElementById("julcanvas");
+	canvas.setAttribute("width", window.innerWidth);
+	canvas.setAttribute("height", window.innerHeight);
+	initGL(canvas);
+	initBuffers();
+	initShaders();
+
+	gl.clearColor(0.0,0.0,0.0,1.0);
+
+	startTime = Date.now() + Math.random() * 3600000;
+
+	render();
+}
+
+function resize(){
+	canvas.setAttribute("width", window.innerWidth);
+	canvas.setAttribute("height", window.innerHeight);
+	gl.viewportWidth = canvas.width;
+	gl.viewportHeight = canvas.height;
+}
+		</script>
+	</head>
+
+	<body style="margin: 0; padding: 0; border: 0;" onload="webGLStart();" onresize="resize();">
+		<canvas id="julcanvas"></canvas>
+	</body>
+</html>
