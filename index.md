@@ -2,4 +2,4 @@
 layout = page
 title = Index
 ---
-Hello World
+Hi! My name is Joel Schmitz and I'm a PhD student at [University of Neuchâtel](https://unine.ch).
