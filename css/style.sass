@@ -1,0 +1,65 @@
+---
+---
+$header: #057
+$navigation: #576
+$footer: #000
+$foreground: #ffe
+$content: #fff0e7
+$background: white
+
+body 
+  font-family: sans-serif
+  font-size: medium
+  max-width: 40rem
+  margin: 0 auto
+  background: $background
+
+.site-header 
+  text-align: center
+  padding: 1rem 1.5rem
+  background: $header
+  color: $foreground
+  h1
+    margin: 0
+    padding: 0
+    font-family: serif
+    font-size: 1.5rem
+  h2
+    margin: 0
+    padding: 0
+    font-family: serif
+    font-weight: normal
+    font-style: italic
+    font-size: .75rem
+
+.main-nav 
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-around
+  background: $navigation
+  color: $foreground
+  padding: 0.5rem 1.5rem
+  a 
+    display: block
+    text-decoration: underline
+    color: inherit
+	
+
+.site-content 
+  padding: 0.5rem 1.5rem
+  background: $content
+  color: black
+
+.site-footer 
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  padding: 0.5rem 1.5rem
+  background: $footer
+  color: transparentize($foreground,0.3)
+  address
+    font-style: normal
+    padding: 0.5rem
+    &:last-child
+      text-align: right
+
