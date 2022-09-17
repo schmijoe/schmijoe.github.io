@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Joel Schmitz's Home Page</title>
+		<title>Joel Schmitz's Fun Page</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="style.css">
@@ -17,18 +17,18 @@ for(i = 0; i < 40; i++){
 	box.setAttribute("class", "slidebox");
 
 	var width = Math.random();
-	var height = Math.random();
+	var height = Math.random()*.9+.1;
 
-	var speed = Math.pow(Math.random(), 2.0) * 0.05 + 0.01;
+	var speed = Math.pow(Math.random(), 2.0) * 1.5 + 0.3;
 	var offset = Math.random();
 
 	box.style.top = String((1-height)*50) + '%';
 	box.style.bottom = String((1-height)*50) + '%';
 	box.style.zIndex = String(Math.floor(-height*10000.0));
 
-	box.style.width = String(width*100) + '%';
-	box.style.opacity = String(Math.pow(1-height, 2.0));
-	box.style.background = "hsl("+String(height*360)+",100%,50%)";
+	box.style.width = String(width*80+20) + '%';
+	box.style.opacity = String(Math.pow(1-height, 0.5));
+	box.style.background = "linear-gradient(to right, hsla("+String(height*360)+",100%,50%, 0) 0%, hsla("+String(height*360)+",100%,50%, 1) 25%, hsla("+String(height*360)+",100%,50%, 1) 75%, hsla("+String(height*360)+",100%,50%, 0)) 100%";
 
 	box.style.animationDuration = String(1.0/speed) + "s";
 	box.style.animationDelay = String(-offset * 1.0/speed) + "s";
