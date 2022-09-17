@@ -3,41 +3,43 @@
 $header: #057
 $navigation: #576
 $footer: #000
-$foreground: #ffe
+$fg_dark: #ffe
+$fg_light: #210
 $content: #fff0e7
-$background: white
+$page_bg: #123
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
 
 body 
   font-family: sans-serif
-  font-size: medium
-  max-width: 40rem
+  font-size: 17px
+  max-width: 720px
   margin: 0 auto
-  background: $background
+  background: $page_bg
 
 .site-header 
   text-align: center
   padding: 1rem 1.5rem
   background: $header
-  color: $foreground
+  color: $fg_dark
+  font-family: 'Lora', serif;
   h1
     margin: 0
     padding: 0
-    font-family: serif
     font-size: 1.5rem
   h2
     margin: 0
     padding: 0
-    font-family: serif
     font-weight: normal
     font-style: italic
-    font-size: .75rem
+    font-size: 1rem
 
 .main-nav 
   display: flex
   flex-wrap: wrap
   justify-content: space-around
   background: $navigation
-  color: $foreground
+  color: $fg_dark
   padding: 0.5rem 1.5rem
   a 
     display: block
@@ -46,9 +48,42 @@ body
 	
 
 .site-content 
-  padding: 0.5rem 1.5rem
+  padding: 35px 35px 45px
   background: $content
-  color: black
+  color: $fg_light
+
+  font-family: 'Lora', serif
+  line-height: 1.4
+  & >:first-child
+    margin-top: 0
+  p
+    text-indent: .7em
+    padding: 0
+    margin: 0
+    hyphens: auto
+  h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p, p:first-child
+    text-indent: 0
+  h1
+    text-align: center
+    font-size: 180%
+  hr
+    height: 1px
+    border: 0
+    background: transparentize($fg_light,0.8) 
+  figure
+    margin: 0
+    padding: 1em 0
+  figcaption
+    font-size: 90%
+    text-align: center
+    font-style: italic
+  img
+    max-width: 100%
+  pre
+    font-size: 80%
+    margin: 1em -35px
+    padding: 1.5em 2em
+    overflow: scroll
 
 .site-footer 
   display: flex
@@ -56,7 +91,7 @@ body
   justify-content: space-between
   padding: 0.5rem 1.5rem
   background: $footer
-  color: transparentize($foreground,0.3)
+  color: transparentize($fg_dark,0.3)
   address
     font-style: normal
     padding: 0.5rem
