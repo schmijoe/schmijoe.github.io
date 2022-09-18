@@ -87,7 +87,7 @@ If we have a large patch of printed area, such as an illustration like in the [s
 
 To deal with such situations, it would be great if we could isolate the printed parts of the image, remove them, and fill in the holes with suitable background colours.
 
-For this we'll use python and OpenCV, since it has a handy inpainting function.
+For this we'll use Python and OpenCV, since it has a handy inpainting function.
 
 So we'll first detect what areas belong to printed areas. This is a bit fiddly and depends on the image you are using. There is thresholding, adaptive thresholding and edge detection.
 Usually a combination of those three methods does the trick. Below I just use edge detection.
@@ -155,7 +155,7 @@ However on an image like that from the [stackoverflow question][stackoverflow] t
 
 {% include image
 imgpath="/assets/posts/bg_removal/haeckel.webp"
-caption="Comparison of Morphology method vs Inpainting on illustrations" %}
+caption="Comparison of morphology method vs inpainting on illustrations" %}
 
 All these methods have their drawbacks, but usually I can find one that works well enough for the given situation. I use this mainly when I have a large amount of scanned images and I want to quickly remove the background, without doing it manually for every image.
 
