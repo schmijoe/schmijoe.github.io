@@ -32,15 +32,6 @@ defaults:
    values:
       layout: "default"
 
-plugins:
-  - jekyll-hyphenate_filter
-
-whitelist:
-  - jekyll-hyphenate_filter
-
-hyphenate_filter:
-  language: en_uk
-
 # Build settings
 
 # Exclude from processing.
