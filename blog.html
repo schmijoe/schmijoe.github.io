@@ -3,8 +3,10 @@ title: "List of Posts"
 ---
 
 {% for post in site.posts %}
+{%- if post.published != false -%}
 <a class="post-listing" href="{{ post.url }}">
   <div class="post-date">{{ post.date | date: "%B %d, %Y" }}</div>
   <div class="post-title">{{ post.title }}</div>
 </a>
+{%- endif -%}
 {% endfor %}
