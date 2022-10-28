@@ -9,7 +9,7 @@ $content: #fff0e7
 $page_bg: #123
 $links: #74f
 
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..700;1,200..700&family=Ubuntu:ital,wght@0,400;0,700;1,400&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..700;1,200..700&family=Ubuntu:ital,wght@0,400;1,400;0,700;1,700&display=swap')
 
 body 
   font-family: 'Ubuntu', sans-serif
@@ -37,6 +37,7 @@ body
     font-style: italic
     font-size: 1rem
 
+
 .main-nav 
   display: flex
   flex-wrap: wrap
@@ -56,6 +57,19 @@ body
     &:hover
       font-weight: bold
       text-shadow: 0 0 5px #000
+    &.fun:hover
+      background: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet,red)
+      background-clip: text
+      color: transparent
+      text-shadow: none
+      animation: rainbow 2s linear infinite
+
+@keyframes rainbow
+  from
+    background-position: 0
+  to
+    background-position: 200px 0
+
 
 .site-content 
   padding: 35px 35px 45px
