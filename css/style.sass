@@ -15,6 +15,10 @@ html
   font-family: 'Fira Sans', sans-serif
   font-size: 21px
 
+@media screen and (max-width: 40rem)
+  html
+    font-size: 16px
+
 body 
   max-width: 44rem
   margin: 0 auto
@@ -72,7 +76,7 @@ body
   to
     background-position: 200px 0
 
-$content_padding: 3rem
+$content_padding: 2rem
 .site-content 
   padding: 35px $content_padding 45px
   background: $content
@@ -80,6 +84,10 @@ $content_padding: 3rem
 
   font-family: 'Libertinus Serif','Crimson Pro', serif
   line-height: 1.4
+  &::after
+    content: ""
+    display: block
+    clear: both
   & >:first-child
     margin-top: 0
   p
