@@ -5,6 +5,8 @@ tag: "Non-Math"
 
 # {{ page.title }}
 
+*Note: I have created a python script, available [here](/assets/posts/bg_removal/remove_background.py), implementing the methods described below.*
+
 Often when scanning old documents, the page it was originally printed/written on has turned slightly yellowish, and it is not immediately cleanly reprintable.
 
 So we want to remove the background colour introduced by the page, while preserving the printed dark parts.
